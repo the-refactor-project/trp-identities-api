@@ -1,20 +1,13 @@
-import chalk from "chalk";
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import supabaseAuthClient from "../supabase/supabaseAuth.js";
+import { AuthRequest } from "../types.js";
 
 const authMiddleware = async (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader?.startsWith("Bearer ")) {
-    console.log(chalk.red("Missing token"));
-
-    res.status(401).json({ error: "Missing token" });
-    return;
-  }
+  const authHeader = req.headers.authorization!;
 
   const token = authHeader.replace("Bearer ", "");
 
@@ -24,6 +17,13 @@ const authMiddleware = async (
     res.status(401).json({ error: "Invalid token" });
     return;
   }
+
+  const username = data.user.user_metadata.user_name;
+
+  req.user = {
+    ...data.user,
+    role: username === "the-refactor-project" ? "admin" : "student",
+  };
 
   next();
 };
