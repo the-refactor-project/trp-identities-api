@@ -2,7 +2,7 @@ import { NextFunction, Response } from "express";
 import supabaseAuthClient from "../supabase/supabaseAuth.js";
 import { AuthRequest } from "../types.js";
 
-const authMiddleware = async (
+const validateToken = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
@@ -28,4 +28,4 @@ const authMiddleware = async (
   next();
 };
 
-export default authMiddleware;
+export default validateToken;

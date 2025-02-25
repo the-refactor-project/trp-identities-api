@@ -7,7 +7,13 @@ const validateAuthHeaders = () => {
     const headersValidation = authHeadersSchema.safeParse(req.headers);
 
     if (!headersValidation.success) {
-      console.log(chalk.red(`Error: Missing bearer in headers`));
+      console.log(
+        chalk.red(
+          `Error: ${headersValidation.error.errors.map(
+            (issue) => issue.message
+          )}`
+        )
+      );
       res.status(400).json({ error: "Invalid headers" });
       return;
     }

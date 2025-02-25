@@ -1,8 +1,9 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import authMiddleware from "../auth/middlewares/authMiddleware.js";
+import validateToken from "../auth/middlewares/validateToken.js";
 import validateAuthHeaders from "../auth/middlewares/validateAuthHeaders.js";
+import validateApp from "../auth/middlewares/validateApp.js";
 
 const app = express();
 
@@ -14,6 +15,6 @@ app.get("/", (_req, res) => {
   res.status(200).json({ ok: true });
 });
 
-app.get("/checkToken", validateAuthHeaders(), authMiddleware);
+app.get("/checkToken", validateAuthHeaders(), validateToken, validateApp);
 
 export default app;
