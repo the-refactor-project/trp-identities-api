@@ -1,6 +1,7 @@
 import { NextFunction, Response } from "express";
 import supabaseAuthClient from "../supabase/supabaseAuth.js";
 import { AuthRequest } from "../types.js";
+import chalk from "chalk";
 
 const validateToken = async (
   req: AuthRequest,
@@ -14,6 +15,7 @@ const validateToken = async (
   const { data, error } = await supabaseAuthClient.auth.getUser(token);
 
   if (error || !data.user) {
+    console.log(chalk.red("Error: invalid token"));
     res.status(401).json({ error: "Invalid token" });
     return;
   }
